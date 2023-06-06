@@ -54,8 +54,9 @@ function CameraInput(props) {
           autoPlay
           className="border-2 border-blue-500 lg:max-h-96 rounded"
         ></video>
+        {/* TODO: Make area to click really big */}
         <button
-          className="bg-blue-400 px-8 py-4 mx-aut rounded text-white"
+          className="bg-blue-400 px-8 py-4 rounded text-white"
           onClick={onCapture}
         >
           Capture
