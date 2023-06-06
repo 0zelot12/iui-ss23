@@ -54,13 +54,24 @@ function CameraInput(props) {
           autoPlay
           className="border-2 border-blue-500 lg:max-h-96 rounded"
         ></video>
+        <p className="text-xl text-blue-950 font-semibold">
+          Capture a series of photos to translate...
+        </p>
         {/* TODO: Make area to click really big */}
-        <button
-          className="bg-blue-400 px-8 py-4 rounded text-white"
-          onClick={onCapture}
-        >
-          Capture
-        </button>
+        <div className="flex flex-col space-y-2">
+          <button
+            className="bg-blue-400 px-8 py-8 rounded text-white font-semibold"
+            onClick={onCapture}
+          >
+            Capture
+          </button>
+          <button
+            className="bg-blue-800 px-8 py-8 rounded text-white font-semibold"
+            onClick={onCapture}
+          >
+            Translate
+          </button>
+        </div>
       </div>
       <canvas ref={canvasRef} className="hidden" />
     </>
