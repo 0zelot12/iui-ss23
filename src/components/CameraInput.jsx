@@ -1,6 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 function CameraInput(props) {
+  const [imagesTaken, setImagesTaken] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -23,7 +26,7 @@ function CameraInput(props) {
     }
   }, [props.facingMode]);
 
-  const handleFrame = () => {
+  const handleFrame = async () => {
     canvasRef.current.width = videoRef.current.videoWidth;
     canvasRef.current.height = videoRef.current.videoHeight;
     canvasRef.current
@@ -35,10 +38,27 @@ function CameraInput(props) {
         canvasRef.current.width,
         canvasRef.current.height
       );
+
     canvasRef.current.toBlob((blob) => {
-      //TODO: Send data via websocket
-      console.log(blob);
+      setImagesTaken([...imagesTaken, blob]);
     }, "image/jpeg");
+  };
+
+  const onTranslate = async () => {
+    setIsLoading(true);
+    window.navigator?.vibrate?.(100);
+    // TODO: Send data to server
+    fetch("http://localhost:5000/process", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: { data: "kekw" },
+    }).then((response) =>
+      response.json().then((data) => {
+        console.log(data);
+        // TODO: Handle errors
+        setIsLoading(false);
+      })
+    );
   };
 
   const onCapture = () => {
@@ -67,12 +87,20 @@ function CameraInput(props) {
           </button>
           <button
             className="bg-blue-800 px-8 py-8 rounded text-white font-semibold"
-            onClick={onCapture}
+            onClick={onTranslate}
           >
             Translate
           </button>
         </div>
       </div>
+      <p className="text-xl text-blue-950 font-semibold">
+        You took {imagesTaken.length} images.
+      </p>
+      {isLoading && (
+        <p className="text-blue-900 font-semibold animate-bounce">
+          Sending request...
+        </p>
+      )}
       <canvas ref={canvasRef} className="hidden" />
     </>
   );
