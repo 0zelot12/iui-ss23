@@ -2,7 +2,7 @@ import CameraInput from "./components/CameraInput";
 import Header from "./components/Header";
 import Navbar from "./components/Navbar";
 
-export default function App() {
+function App() {
   return (
     <div className="App">
       <Header></Header>
@@ -13,3 +13,5 @@ export default function App() {
     </div>
   );
 }
+
+export default App;

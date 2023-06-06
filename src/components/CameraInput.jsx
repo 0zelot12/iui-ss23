@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-export default function CameraInput(props) {
+function CameraInput(props) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -55,7 +55,7 @@ export default function CameraInput(props) {
           className="border-2 border-blue-500 lg:max-h-96 rounded"
         ></video>
         <button
-          className="bg-blue-400 px-8 py-4 mx-aut rounded"
+          className="bg-blue-400 px-8 py-4 mx-aut rounded text-white"
           onClick={onCapture}
         >
           Capture
@@ -65,3 +65,5 @@ export default function CameraInput(props) {
     </>
   );
 }
+
+export default CameraInput;
