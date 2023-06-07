@@ -39,9 +39,11 @@ function CameraInput(props) {
         canvasRef.current.height
       );
 
-    canvasRef.current.toBlob((blob) => {
-      setImagesTaken([...imagesTaken, blob]);
-    }, "image/jpeg");
+    const imageData = canvasRef.current.toDataURL();
+    const newImage = {
+      data: imageData,
+    };
+    setImagesTaken([...imagesTaken, newImage]);
   };
 
   const onTranslate = async () => {
@@ -51,7 +53,7 @@ function CameraInput(props) {
     fetch("http://localhost:5000/process", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: { data: "kekw" },
+      body: JSON.stringify({ images: imagesTaken }),
     }).then((response) =>
       response.json().then((data) => {
         console.log(data);
