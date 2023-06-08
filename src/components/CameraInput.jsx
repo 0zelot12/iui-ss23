@@ -49,7 +49,6 @@ function CameraInput(props) {
   const onTranslate = async () => {
     setIsLoading(true);
     window.navigator?.vibrate?.(100);
-    // TODO: Send data to server
     fetch("http://localhost:5000/process", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
