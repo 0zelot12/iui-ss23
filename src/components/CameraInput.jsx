@@ -69,11 +69,11 @@ function CameraInput(props) {
 
   return (
     <>
-      <div className="space-y-2 text-center">
+      <div className="space-y-2 text-center flex flex-col">
         <video
           ref={videoRef}
           autoPlay
-          className="border-2 border-blue-500 bg-cover rounded"
+          className="border-2 border-blue-500 bg-cover rounded w-screen"
         ></video>
         <p className="text-xl text-blue-950 font-semibold">
           Capture a series of photos to translate...
