@@ -28,7 +28,7 @@ function App() {
   };
 
   return (
-    <div>
+    <>
       <CameraInput ref={videoInputRef} facingMode="environment" />
       <div className="container p-2 space-y-2 mx-auto flex flex-col items-center">
         <div className="grid grid-cols-2 space-x-2">
@@ -46,7 +46,7 @@ function App() {
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
