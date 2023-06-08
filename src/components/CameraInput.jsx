@@ -1,18 +1,22 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useImperativeHandle,
+  forwardRef,
+} from "react";
 
-function CameraInput(props) {
-  const [imagesTaken, setImagesTaken] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
+function CameraInput({ facingMode }, ref) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+
+  useImperativeHandle(ref, () => ({ handleFrame }));
 
   useEffect(() => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
         .getUserMedia({
           video: {
-            facingMode: props.facingMode,
+            facingMode: facingMode,
           },
         })
         .then((stream) => {
@@ -24,9 +28,9 @@ function CameraInput(props) {
     } else {
       console.error("This device does not support camera input.");
     }
-  }, [props.facingMode]);
+  }, [facingMode]);
 
-  const handleFrame = async () => {
+  const handleFrame = () => {
     canvasRef.current.width = videoRef.current.videoWidth;
     canvasRef.current.height = videoRef.current.videoHeight;
     canvasRef.current
@@ -39,72 +43,21 @@ function CameraInput(props) {
         canvasRef.current.height
       );
 
-    const imageData = canvasRef.current.toDataURL();
-    const newImage = {
-      data: imageData,
+    return {
+      data: canvasRef.current.toDataURL(),
     };
-    setImagesTaken([...imagesTaken, newImage]);
-  };
-
-  const onTranslate = async () => {
-    setIsLoading(true);
-    window.navigator?.vibrate?.(100);
-    fetch("http://localhost:5000/process", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ images: imagesTaken }),
-    }).then((response) =>
-      response.json().then((data) => {
-        console.log(data);
-        // TODO: Handle errors
-        setIsLoading(false);
-      })
-    );
-  };
-
-  const onCapture = () => {
-    window.navigator?.vibrate?.(100);
-    handleFrame();
   };
 
   return (
     <>
-      <div className="space-y-2 text-center flex flex-col">
-        <video
-          ref={videoRef}
-          autoPlay
-          className="border-2 border-blue-500 bg-cover rounded w-screen"
-        ></video>
-        <p className="text-xl text-blue-950 font-semibold">
-          Capture a series of photos to translate...
-        </p>
-        {/* TODO: Make area to click really big */}
-        <div className="grid grid-cols-2 gap-x-2">
-          <button
-            className="bg-blue-400 px-8 py-8 rounded text-white font-semibold"
-            onClick={onCapture}
-          >
-            Capture
-          </button>
-          <button
-            className="bg-blue-800 px-8 py-8 rounded text-white font-semibold"
-            onClick={onTranslate}
-          >
-            Translate
-          </button>
-        </div>
-      </div>
-      <p className="text-xl text-blue-950 font-semibold">
-        You took {imagesTaken.length} images.
-      </p>
-      {isLoading && (
-        <p className="text-blue-900 font-semibold animate-bounce">
-          Sending request...
-        </p>
-      )}
+      <video
+        className="mx-auto lg:max-h-[512px]"
+        ref={videoRef}
+        autoPlay
+      ></video>
       <canvas ref={canvasRef} className="hidden" />
     </>
   );
 }
 
-export default CameraInput;
+export default forwardRef(CameraInput);
