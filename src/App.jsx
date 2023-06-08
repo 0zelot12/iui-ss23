@@ -29,8 +29,8 @@ function App() {
 
   return (
     <>
-      <CameraInput ref={videoInputRef} facingMode="environment" />
       <div className="container p-2 space-y-2 mx-auto flex flex-col items-center">
+        <CameraInput ref={videoInputRef} facingMode="environment" />
         <div className="grid grid-cols-2 space-x-2">
           <button
             className="bg-blue-500 px-4 py-2 rounded text-white"

@@ -48,10 +48,12 @@ function CameraInput({ facingMode }, ref) {
     };
   };
 
+  // TODO: Calculate maximum width of the video box to prevent overflow
+
   return (
     <>
       <video
-        className="mx-auto lg:max-h-[512px]"
+        className="mx-auto rounded lg:max-h-[512px]"
         ref={videoRef}
         autoPlay
       ></video>
