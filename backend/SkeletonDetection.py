@@ -11,26 +11,26 @@ def get_labels_images(filepath):
     with open('../Data/archive_data.csv', 'a') as f_object:
 
         writer_object = writer(f_object)
-        directory = '../Data/archive/dataset5/C/c'
-        #for directory in glob.glob(filepath):
-        name = str(directory[-1])
-        print(name)
-        for file in glob.glob(directory + '/color_*.png'):
-            #images.append(file)
-            head,tail = os.path.split(file)
-            #print(tail)
-            pic = cv2.imread(file)
-            try:
-                skel_pic=detect_skeleton(pic, name)
-                savepath = "../Data/skeleton_pics/" + name + "/"+ tail
-                cv2.imwrite(savepath, skel_pic)
-                skel_pic_vector = build_pic_vector(skel_pic)
-                skel_pic_vector = np.hstack((name,skel_pic_vector))
-                skel_pic_vector = skel_pic_vector.tolist()
-                #print(skel_pic_vector)
-                writer_object.writerow(skel_pic_vector)
-            except :
-                print("no landmarks detected for ", name)
+        #directory = '../Data/archive/dataset5/C/d'
+        for directory in glob.glob(filepath):
+            name = str(directory[-1])
+            print(name)
+            for file in glob.glob(directory + '/color_*.png'):
+                #images.append(file)
+                head,tail = os.path.split(file)
+                #print(tail)
+                pic = cv2.imread(file)
+                try:
+                    skel_pic=detect_skeleton(pic, name)
+                    savepath = "../Data/skeleton_pics/" + name + "/"+ tail
+                    cv2.imwrite(savepath, skel_pic)
+                    skel_pic_vector = build_pic_vector(skel_pic)
+                    skel_pic_vector = np.hstack((name,skel_pic_vector))
+                    skel_pic_vector = skel_pic_vector.tolist()
+                    #print(skel_pic_vector)
+                    writer_object.writerow(skel_pic_vector)
+                except :
+                    print("no landmarks detected for ", name)
 
         f_object.close()
 
