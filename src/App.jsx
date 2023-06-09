@@ -39,7 +39,7 @@ function App() {
             Capture
           </button>
           <button
-            className="bg-blue-500 px-4 py-2 rounded text-white"
+            className="bg-blue-800 px-4 py-2 rounded text-white"
             onClick={onTranslate}
           >
             Translate
