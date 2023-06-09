@@ -11,8 +11,8 @@ def get_labels_images(filepath):
     with open('../Data/archive_data.csv', 'a') as f_object:
 
         writer_object = writer(f_object)
-        #directory = '../Data/archive/dataset5/C/d'
-        for directory in glob.glob(filepath):
+        #directory = '../Data/archive/dataset5/C/d'     #You can choose between these two lines to either go ll
+        for directory in glob.glob(filepath):           #through all directorys or solect one (i dit it until d)
             name = str(directory[-1])
             print(name)
             for file in glob.glob(directory + '/color_*.png'):
