@@ -34,6 +34,8 @@ function App() {
       <Header></Header>
       <div className="container p-2 space-y-2 mx-auto flex flex-col items-center">
         <CameraInput ref={videoInputRef} facingMode="environment" />
+        {imagesTaken.length === 0 && <p className="text-blue-950 text-xl text-center">Capture a gesture you want to translate.</p>}
+        {imagesTaken.length > 0 && <p className="text-blue-950 text-xl text-center">You took {imagesTaken.length} pictures.</p>}
         <div className="grid grid-cols-2 space-x-2 w-full lg:w-fit">
           <button
             className="bg-blue-500 px-8 py-4 rounded text-white"
@@ -48,7 +50,6 @@ function App() {
             Translate
           </button>
         </div>
-        <p className="text-blue-950 text-xl text-center">Capture a gesture you want to translate.</p>
       </div>
       <Footer></Footer>
     </>
