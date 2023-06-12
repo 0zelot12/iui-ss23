@@ -9,7 +9,7 @@ function Navbar() {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-6 h-6 mx-auto mb-2 stroke-blue-800"
+              className="w-6 h-6 mx-auto mb-2 stroke-blue-950"
             >
               <path
                 strokeLinecap="round"
@@ -26,7 +26,7 @@ function Navbar() {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-6 h-6 mx-auto mb-2 stroke-blue-800"
+              className="w-6 h-6 mx-auto mb-2 stroke-blue-950"
             >
               <path
                 strokeLinecap="round"
