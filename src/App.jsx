@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
 
 import CameraInput from "./components/CameraInput";
+import Header from "./components/Header";
+import Footer from "./components/Footer"
 
 function App() {
   const [imagesTaken, setImagesTaken] = useState([]);
@@ -29,6 +31,7 @@ function App() {
 
   return (
     <>
+      <Header></Header>
       <div className="container p-2 space-y-2 mx-auto flex flex-col items-center">
         <CameraInput ref={videoInputRef} facingMode="environment" />
         <div className="grid grid-cols-2 space-x-2 w-full lg:w-fit">
@@ -45,7 +48,9 @@ function App() {
             Translate
           </button>
         </div>
+        <p className="text-blue-950 text-xl text-center">Capture a gesture you want to translate.</p>
       </div>
+      <Footer></Footer>
     </>
   );
 }
