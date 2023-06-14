@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar"
 function App() {
   const [imagesTaken, setImagesTaken] = useState([]);
 
+  // TODO: Investigate if useState(...) would be a better practise
   let touchDuration = 0;
   let touchTimer = null;
 
