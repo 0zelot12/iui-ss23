@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 
 import CameraInput from "./components/CameraInput";
 import Header from "./components/Header";
-import Footer from "./components/Footer"
+import Footer from "./components/Navbar"
 
 function App() {
   const [imagesTaken, setImagesTaken] = useState([]);
