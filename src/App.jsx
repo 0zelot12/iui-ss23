@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 
 import CameraInput from "./components/CameraInput";
 import Header from "./components/Header";
-import Footer from "./components/Navbar"
+import Navbar from "./components/Navbar"
 
 function App() {
   const [imagesTaken, setImagesTaken] = useState([]);
@@ -61,7 +61,7 @@ function App() {
         {imagesTaken.length === 0 && <p className="text-blue-950 text-xl text-center">Tap anywhere on the screen to capture an image.</p>}
         {imagesTaken.length > 0 && <p className="text-blue-950 text-xl text-center">You took {imagesTaken.length} pictures.</p>}
       </div>
-      <Footer></Footer>
+      <Navbar></Navbar>
       <div className="absolute top-0 h-screen w-screen" onTouchStart={handleOnTouchStart} onTouchEnd={handleOnTouchEnd} />
     </>
   );
