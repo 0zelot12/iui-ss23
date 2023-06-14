@@ -12,13 +12,18 @@ function App() {
 
   const videoInputRef = useRef(null);
 
+  const resetTimer = () => {
+    clearInterval(touchTimer);
+    touchTimer = null;
+    touchDuration = 0;
+  }
+
   const handleOnTouchStart = () => {
     touchTimer = setInterval(() => {
       touchDuration++;
       if (touchDuration > 500) {
-        clearInterval(touchTimer);
-        touchTimer = null;
-        touchDuration = 0;
+        window.navigator?.vibrate?.(100);
+        resetTimer();
         translate();
       }
     }, 1)
@@ -26,15 +31,13 @@ function App() {
 
   const handleOnTouchEnd = () => {
     if (touchDuration < 500 && touchTimer) {
-      clearInterval(touchTimer);
-      touchTimer = null;
-      touchDuration = 0;
+      window.navigator?.vibrate?.(50);
+      resetTimer();
       captureFrame();
     }
   }
 
   const translate = async () => {
-    window.navigator?.vibrate?.(100);
     fetch("http://localhost:5000/process", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -48,7 +51,6 @@ function App() {
   };
 
   const captureFrame = () => {
-    window.navigator?.vibrate?.(50);
     const newImage = videoInputRef.current.handleFrame();
     setImagesTaken([...imagesTaken, newImage]);
   };
