@@ -30,15 +30,6 @@ function CameraInput({ facingMode }, ref) {
     }
   }, [facingMode]);
 
-  const handleOnTouchStart = () => {
-    console.log("onTouchStart");
-  }
-
-  const handleOnTouchEnd = () => {
-    console.log("onTouchEnd");
-  }
-
-
   const handleFrame = () => {
     canvasRef.current.width = videoRef.current.videoWidth;
     canvasRef.current.height = videoRef.current.videoHeight;
@@ -65,7 +56,6 @@ function CameraInput({ facingMode }, ref) {
         autoPlay
       ></video>
       <canvas ref={canvasRef} className="hidden" />
-      <div className="absolute top-0 h-screen w-screen" onTouchStart={handleOnTouchStart} onTouchEnd={handleOnTouchEnd} />
     </>
   );
 }

@@ -7,9 +7,33 @@ import Footer from "./components/Navbar"
 function App() {
   const [imagesTaken, setImagesTaken] = useState([]);
 
+  let touchDuration = 0;
+  let touchTimer = null;
+
   const videoInputRef = useRef(null);
 
-  const onTranslate = async () => {
+  const handleOnTouchStart = () => {
+    touchTimer = setInterval(() => {
+      touchDuration++;
+      if (touchDuration > 500) {
+        clearInterval(touchTimer);
+        touchTimer = null;
+        touchDuration = 0;
+        translate();
+      }
+    }, 1)
+  }
+
+  const handleOnTouchEnd = () => {
+    if (touchDuration < 500 && touchTimer) {
+      clearInterval(touchTimer);
+      touchTimer = null;
+      touchDuration = 0;
+      captureFrame();
+    }
+  }
+
+  const translate = async () => {
     window.navigator?.vibrate?.(100);
     fetch("http://localhost:5000/process", {
       method: "POST",
@@ -23,8 +47,8 @@ function App() {
     );
   };
 
-  const onCapture = () => {
-    window.navigator?.vibrate?.(100);
+  const captureFrame = () => {
+    window.navigator?.vibrate?.(50);
     const newImage = videoInputRef.current.handleFrame();
     setImagesTaken([...imagesTaken, newImage]);
   };
@@ -38,6 +62,7 @@ function App() {
         {imagesTaken.length > 0 && <p className="text-blue-950 text-xl text-center">You took {imagesTaken.length} pictures.</p>}
       </div>
       <Footer></Footer>
+      <div className="absolute top-0 h-screen w-screen" onTouchStart={handleOnTouchStart} onTouchEnd={handleOnTouchEnd} />
     </>
   );
 }
