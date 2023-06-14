@@ -30,6 +30,15 @@ function CameraInput({ facingMode }, ref) {
     }
   }, [facingMode]);
 
+  const handleOnTouchStart = () => {
+    console.log("onTouchStart");
+  }
+
+  const handleOnTouchEnd = () => {
+    console.log("onTouchEnd");
+  }
+
+
   const handleFrame = () => {
     canvasRef.current.width = videoRef.current.videoWidth;
     canvasRef.current.height = videoRef.current.videoHeight;
@@ -48,16 +57,15 @@ function CameraInput({ facingMode }, ref) {
     };
   };
 
-  // TODO: Calculate maximum width of the video box to prevent overflow
-
   return (
     <>
       <video
-        className="mx-auto rounded lg:max-h-[512px]"
+        className="mx-auto lg:max-h-[512px] rounded-b-3xl md:mt-2 md:rounded-t-3xl"
         ref={videoRef}
         autoPlay
       ></video>
       <canvas ref={canvasRef} className="hidden" />
+      <div className="absolute top-0 h-screen w-screen" onTouchStart={handleOnTouchStart} onTouchEnd={handleOnTouchEnd} />
     </>
   );
 }
