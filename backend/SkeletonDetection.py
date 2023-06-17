@@ -37,7 +37,7 @@ def get_labels_images(filepath):
 
 
 def get_labels_vectors(filepath):
-    with open('../Data/landmark_data.csv', 'a') as f_object:
+    with open('../Data/landmark_data2.csv', 'a') as f_object:
 
         writer_object = writer(f_object)
         #directory = '../Data/archive/dataset5/C/d'     #You can choose between these two lines to either go ll
