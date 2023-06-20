@@ -4,23 +4,25 @@ import { Spinner } from "../components/Spinner";
 import { CameraInput } from "../components/CameraInput";
 
 function Translate() {
-  const [imagesTaken, setImagesTaken] = useState([]);
+  const [classificationResults, setClassificationResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const translate = async () => {
+  const handleCaptureFrame = (frame) => {
+    setIsLoading(true);
     fetch("http://localhost:5000/process", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ images: imagesTaken }),
+      body: JSON.stringify({ image: frame }),
     }).then((response) =>
-      response.json().then((data) => {
+      response.json().then((classificationResult) => {
         // TODO: Handle errors
-        console.log(data);
+        setClassificationResults([
+          ...classificationResults,
+          { label: classificationResult.classification },
+        ]);
+        setIsLoading(false);
       })
     );
-  };
-
-  const handleCaptureFrame = (frame) => {
-    setImagesTaken([...imagesTaken, frame]);
   };
 
   return (
@@ -33,14 +35,8 @@ function Translate() {
         <p className="text-blue-950 text-xl text-center">
           Tap to capture an image.
         </p>
-        <PreviewBox
-          items={[
-            { id: 1, label: "A" },
-            { id: 2, label: "B" },
-            { id: 3, label: "C" },
-          ]}
-        ></PreviewBox>
-        <Spinner active={true} />
+        <PreviewBox items={classificationResults}></PreviewBox>
+        <Spinner active={isLoading} />
       </div>
     </>
   );
