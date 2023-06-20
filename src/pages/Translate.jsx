@@ -2,6 +2,7 @@ import { useState } from "react";
 import { PreviewBox } from "../components/PreviewBox";
 import { Spinner } from "../components/Spinner";
 import { CameraInput } from "../components/CameraInput";
+import { BouncingArrow } from "../components/BouncingArrow";
 
 function Translate() {
   const [classificationResults, setClassificationResults] = useState([]);
@@ -33,10 +34,16 @@ function Translate() {
         onCaptureFrame={handleCaptureFrame}
       />
       <div className="container p-2 space-y-2 mx-auto flex flex-col items-center">
-        <p className="text-blue-950 text-xl text-center">
-          Tap to capture an image.
-        </p>
-        <PreviewBox items={classificationResults}></PreviewBox>
+        {classificationResults.length === 0 ? (
+          <>
+            <BouncingArrow />
+            <p className="text-blue-950 text-xl text-center">
+              Tap to capture an image.
+            </p>
+          </>
+        ) : (
+          <PreviewBox items={classificationResults} />
+        )}
         <Spinner active={isLoading} />
       </div>
     </>
