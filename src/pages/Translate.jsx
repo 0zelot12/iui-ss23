@@ -28,8 +28,9 @@ function Translate() {
   return (
     <>
       <CameraInput
-        onCaptureFrame={handleCaptureFrame}
         facingMode="environment"
+        disabled={isLoading}
+        onCaptureFrame={handleCaptureFrame}
       />
       <div className="container p-2 space-y-2 mx-auto flex flex-col items-center">
         <p className="text-blue-950 text-xl text-center">

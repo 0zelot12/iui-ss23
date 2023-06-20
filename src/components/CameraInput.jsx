@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-function CameraInput({ facingMode, onCaptureFrame }) {
+function CameraInput({ facingMode, onCaptureFrame, disabled }) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -24,6 +24,9 @@ function CameraInput({ facingMode, onCaptureFrame }) {
   }, [facingMode]);
 
   const handleClick = () => {
+    if (disabled) {
+      return;
+    }
     window.navigator?.vibrate?.(50);
     canvasRef.current.width = videoRef.current.videoWidth;
     canvasRef.current.height = videoRef.current.videoHeight;
