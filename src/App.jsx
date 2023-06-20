@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 
 import CameraInput from "./components/CameraInput";
 import Header from "./components/Header";
-import Navbar from "./components/Navbar"
+import { PreviewBox } from "./components/PreviewBox";
 
 function App() {
   const [imagesTaken, setImagesTaken] = useState([]);
@@ -17,7 +17,7 @@ function App() {
     clearInterval(touchTimer);
     touchTimer = null;
     touchDuration = 0;
-  }
+  };
 
   const handleOnTouchStart = () => {
     touchTimer = setInterval(() => {
@@ -27,8 +27,8 @@ function App() {
         resetTimer();
         translate();
       }
-    }, 1)
-  }
+    }, 1);
+  };
 
   const handleOnTouchEnd = () => {
     if (touchDuration < 500 && touchTimer) {
@@ -36,7 +36,7 @@ function App() {
       resetTimer();
       captureFrame();
     }
-  }
+  };
 
   const translate = async () => {
     fetch("http://localhost:5000/process", {
@@ -61,11 +61,24 @@ function App() {
       <Header></Header>
       <CameraInput ref={videoInputRef} facingMode="environment" />
       <div className="container p-2 space-y-2 mx-auto flex flex-col items-center">
-        {imagesTaken.length === 0 && <p className="text-blue-950 text-xl text-center">Tap anywhere on the screen to capture an image.</p>}
-        {imagesTaken.length > 0 && <p className="text-blue-950 text-xl text-center">You took {imagesTaken.length} pictures.</p>}
+        {imagesTaken.length === 0 && (
+          <p className="text-blue-950 text-xl text-center">
+            Tap to capture an image.
+          </p>
+        )}
+        <PreviewBox
+          items={[
+            { id: 1, label: "A" },
+            { id: 2, label: "B" },
+            { id: 3, label: "C" },
+          ]}
+        ></PreviewBox>
       </div>
-      <Navbar></Navbar>
-      <div className="absolute top-0 h-screen w-screen" onTouchStart={handleOnTouchStart} onTouchEnd={handleOnTouchEnd} />
+      <div
+        className="absolute top-0 h-screen w-screen"
+        onTouchStart={handleOnTouchStart}
+        onTouchEnd={handleOnTouchEnd}
+      />
     </>
   );
 }

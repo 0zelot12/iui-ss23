@@ -51,7 +51,7 @@ function CameraInput({ facingMode }, ref) {
   return (
     <>
       <video
-        className="mx-auto lg:max-h-[512px] rounded-b-3xl md:mt-2 md:rounded-t-3xl"
+        className="mx-auto lg:max-h-[512px] md:mt-2"
         ref={videoRef}
         autoPlay
       ></video>
