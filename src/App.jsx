@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import CameraInput from "./components/CameraInput";
 import Header from "./components/Header";
 import { PreviewBox } from "./components/PreviewBox";
+import { Spinner } from "./components/Spinner";
 
 function App() {
   const [imagesTaken, setImagesTaken] = useState([]);
@@ -73,6 +74,7 @@ function App() {
             { id: 3, label: "C" },
           ]}
         ></PreviewBox>
+        <Spinner active={true} />
       </div>
       <div
         className="absolute top-0 h-screen w-screen"
