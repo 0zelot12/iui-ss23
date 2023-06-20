@@ -2,15 +2,43 @@ import { useRef, useState } from "react";
 
 import CameraInput from "./components/CameraInput";
 import Header from "./components/Header";
-import Footer from "./components/Navbar"
+import Navbar from "./components/Navbar"
 
 function App() {
   const [imagesTaken, setImagesTaken] = useState([]);
 
+  // TODO: Investigate if useState(...) would be a better practise
+  let touchDuration = 0;
+  let touchTimer = null;
+
   const videoInputRef = useRef(null);
 
-  const onTranslate = async () => {
-    window.navigator?.vibrate?.(100);
+  const resetTimer = () => {
+    clearInterval(touchTimer);
+    touchTimer = null;
+    touchDuration = 0;
+  }
+
+  const handleOnTouchStart = () => {
+    touchTimer = setInterval(() => {
+      touchDuration++;
+      if (touchDuration > 500) {
+        window.navigator?.vibrate?.(100);
+        resetTimer();
+        translate();
+      }
+    }, 1)
+  }
+
+  const handleOnTouchEnd = () => {
+    if (touchDuration < 500 && touchTimer) {
+      window.navigator?.vibrate?.(50);
+      resetTimer();
+      captureFrame();
+    }
+  }
+
+  const translate = async () => {
     fetch("http://localhost:5000/process", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -23,8 +51,7 @@ function App() {
     );
   };
 
-  const onCapture = () => {
-    window.navigator?.vibrate?.(100);
+  const captureFrame = () => {
     const newImage = videoInputRef.current.handleFrame();
     setImagesTaken([...imagesTaken, newImage]);
   };
@@ -32,26 +59,13 @@ function App() {
   return (
     <>
       <Header></Header>
+      <CameraInput ref={videoInputRef} facingMode="environment" />
       <div className="container p-2 space-y-2 mx-auto flex flex-col items-center">
-        <CameraInput ref={videoInputRef} facingMode="environment" />
-        {imagesTaken.length === 0 && <p className="text-blue-950 text-xl text-center">Capture a gesture you want to translate.</p>}
+        {imagesTaken.length === 0 && <p className="text-blue-950 text-xl text-center">Tap anywhere on the screen to capture an image.</p>}
         {imagesTaken.length > 0 && <p className="text-blue-950 text-xl text-center">You took {imagesTaken.length} pictures.</p>}
-        <div className="grid grid-cols-2 space-x-2 w-full lg:w-fit">
-          <button
-            className="bg-blue-500 px-8 py-4 rounded text-white"
-            onClick={onCapture}
-          >
-            Capture
-          </button>
-          <button
-            className="bg-blue-800 px-4 py-2 rounded text-white"
-            onClick={onTranslate}
-          >
-            Translate
-          </button>
-        </div>
       </div>
-      <Footer></Footer>
+      <Navbar></Navbar>
+      <div className="absolute top-0 h-screen w-screen" onTouchStart={handleOnTouchStart} onTouchEnd={handleOnTouchEnd} />
     </>
   );
 }

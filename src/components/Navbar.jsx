@@ -1,6 +1,6 @@
 function Navbar() {
     return (
-      <div className="bg-blue-100 fixed bottom-0 px-2 py-4 w-full border-t-2 border-blue-500">
+      <div className="bg-blue-100 fixed bottom-0 py-2 w-full border-t-2 border-blue-500">
         <ol className="flex justify-around text-xs">
           <li className="cursor-pointer">
             <svg
