@@ -1,42 +1,16 @@
 import { useRef, useState } from "react";
+import { PreviewBox } from "../components/PreviewBox";
+import { Spinner } from "../components/Spinner";
+import CameraInput from "../components/CameraInput";
 
-import CameraInput from "./components/CameraInput";
-import Header from "./components/Header";
-import { PreviewBox } from "./components/PreviewBox";
-import { Spinner } from "./components/Spinner";
-
-function App() {
+function Translate() {
   const [imagesTaken, setImagesTaken] = useState([]);
-
-  // TODO: Investigate if useState(...) would be a better practise
-  let touchDuration = 0;
-  let touchTimer = null;
 
   const videoInputRef = useRef(null);
 
-  const resetTimer = () => {
-    clearInterval(touchTimer);
-    touchTimer = null;
-    touchDuration = 0;
-  };
-
   const handleOnTouchStart = () => {
-    touchTimer = setInterval(() => {
-      touchDuration++;
-      if (touchDuration > 500) {
-        window.navigator?.vibrate?.(100);
-        resetTimer();
-        translate();
-      }
-    }, 1);
-  };
-
-  const handleOnTouchEnd = () => {
-    if (touchDuration < 500 && touchTimer) {
-      window.navigator?.vibrate?.(50);
-      resetTimer();
-      captureFrame();
-    }
+    window.navigator?.vibrate?.(50);
+    captureFrame();
   };
 
   const translate = async () => {
@@ -59,7 +33,6 @@ function App() {
 
   return (
     <>
-      <Header></Header>
       <CameraInput ref={videoInputRef} facingMode="environment" />
       <div className="container p-2 space-y-2 mx-auto flex flex-col items-center">
         {imagesTaken.length === 0 && (
@@ -76,13 +49,12 @@ function App() {
         ></PreviewBox>
         <Spinner active={true} />
       </div>
-      <div
+      {/* <div
         className="absolute top-0 h-screen w-screen"
         onTouchStart={handleOnTouchStart}
-        onTouchEnd={handleOnTouchEnd}
-      />
+      /> */}
     </>
   );
 }
 
-export default App;
+export { Translate };
