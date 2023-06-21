@@ -1,15 +1,8 @@
-import React, {
-  useEffect,
-  useRef,
-  useImperativeHandle,
-  forwardRef,
-} from "react";
+import React, { useEffect, useRef } from "react";
 
-function CameraInput({ facingMode }, ref) {
+function CameraInput({ facingMode, onCaptureFrame, disabled }) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-
-  useImperativeHandle(ref, () => ({ handleFrame }));
 
   useEffect(() => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -30,7 +23,11 @@ function CameraInput({ facingMode }, ref) {
     }
   }, [facingMode]);
 
-  const handleFrame = () => {
+  const handleClick = () => {
+    if (disabled) {
+      return;
+    }
+    window.navigator?.vibrate?.(50);
     canvasRef.current.width = videoRef.current.videoWidth;
     canvasRef.current.height = videoRef.current.videoHeight;
     canvasRef.current
@@ -43,23 +40,22 @@ function CameraInput({ facingMode }, ref) {
         canvasRef.current.height
       );
 
-    return {
+    onCaptureFrame({
       data: canvasRef.current.toDataURL(),
-    };
+    });
   };
-
-  // TODO: Calculate maximum width of the video box to prevent overflow
 
   return (
     <>
       <video
-        className="mx-auto rounded lg:max-h-[512px]"
+        className="mx-auto lg:max-h-[512px] md:mt-2"
         ref={videoRef}
         autoPlay
+        onClick={handleClick}
       ></video>
       <canvas ref={canvasRef} className="hidden" />
     </>
   );
 }
 
-export default forwardRef(CameraInput);
+export { CameraInput };

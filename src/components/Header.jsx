@@ -1,7 +1,12 @@
+import { Link } from "react-router-dom";
+
 function Header() {
-    return (
-      <div className="px-4 py-6 bg-blue-500 text-white flex justify-between items-center font-semibold">
-        <h1 className="text-xl">Manolingo</h1>
+  return (
+    <div className="bg-blue-500">
+      <div className="container mx-auto px-4 py-6 text-white flex justify-between items-center font-semibold">
+        <Link to="/">
+          <h1 className="text-xl">Manolingo</h1>
+        </Link>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -22,7 +27,8 @@ function Header() {
           />
         </svg>
       </div>
-    );
-  }
-  
-  export default Header;
+    </div>
+  );
+}
+
+export { Header };
