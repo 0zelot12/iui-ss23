@@ -3,6 +3,8 @@ from sklearn import model_selection
 import sklearn.svm
 from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
+import joblib
+import pickle
 
 landmark_data = pd.read_csv("../Data/landmark_data.csv")
 array = landmark_data.values
@@ -28,3 +30,12 @@ knn_classifier = KNeighborsClassifier(3)
 knn_classifier.fit(X_train, Y_train)
 print("Score for knn train: ",knn_classifier.score(X_train, Y_train))
 print("Score for knn test: ", knn_classifier.score(X_test, Y_test))
+
+def load_model():
+    filename = 'model.pickle'
+    loaded_model = pickle.load(open(filename, "rb"))
+    return loaded_model
+
+def save_model():
+    filename = 'model.pickle'
+    pickle.dump(svm_classifier, open(filename, "wb"))
