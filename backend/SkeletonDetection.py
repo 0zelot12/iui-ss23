@@ -117,6 +117,20 @@ def preprocess_image(x):
 
     return x
 
+
+def convert_input_pic(file):
+    pic = cv2.imread(file)
+    skel_landmarks = detect_skeleton(pic)
+    if skel_landmarks is not None:
+        skel_landmarks = skel_landmarks[0]
+        skel_landmarks = normalise_handlandmarks(skel_landmarks)
+        landmark_list = []
+        for akt_mark in skel_landmarks.landmark:
+            landmark_list.append(akt_mark.x)
+            landmark_list.append(akt_mark.y)
+            landmark_list.append(akt_mark.z)
+    return landmark_list
+
 #frame = cv2.imread("../Data/archive/dataset5/C/b/color_1_0010.png")
 #frame = frame.astype(np.uint8)
 #print(frame.shape)
