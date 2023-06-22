@@ -6,8 +6,6 @@ from skeletion_detection import convert_input_pic
 import base64
 import random
 
-
-
 from PIL import Image
 from io import BytesIO
 
@@ -46,7 +44,6 @@ MOCK_RESULTS = [
 
 @app.route("/process", methods=["POST"])
 def process():
-    # TODO: Process image data from the request
     base64_image = request.json["image"]["data"]
     base64_image_without_header = base64_image.split(",")[-1]
     image_data = base64.b64decode(base64_image_without_header)
