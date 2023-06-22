@@ -117,11 +117,15 @@ def preprocess_image(x):
 
     return x
 
+def pil_to_cv(img):
+    nimg = np.array(img)
+    return cv2.cvtColor(nimg, cv2.COLOR_RGB2BGR)
 
-def convert_input_pic(file):
-    pic = cv2.imread(file)
-    skel_landmarks = detect_skeleton(pic)
-    if skel_landmarks is not None:
+def convert_input_pic(image):
+    skel_landmarks = detect_skeleton(pil_to_cv(image))
+    if skel_landmarks is None:
+        return []
+    else:
         skel_landmarks = skel_landmarks[0]
         skel_landmarks = normalise_handlandmarks(skel_landmarks)
         landmark_list = []
@@ -129,7 +133,7 @@ def convert_input_pic(file):
             landmark_list.append(akt_mark.x)
             landmark_list.append(akt_mark.y)
             landmark_list.append(akt_mark.z)
-    return landmark_list
+        return landmark_list
 
 #frame = cv2.imread("../Data/archive/dataset5/C/b/color_1_0010.png")
 #frame = frame.astype(np.uint8)
@@ -140,9 +144,9 @@ def convert_input_pic(file):
 #pic = preprocess_image(np.array(train_data.iloc[0,1:]))
 #detect_skeleton(pic)
 
-dataset_dir = os.path.abspath('../Data/archive/dataset5/C/*')
+#dataset_dir = os.path.abspath('../Data/archive/dataset5/C/*')
 #data_dict = get_labels_images(dataset_dir)
-get_labels_vectors(dataset_dir)
+#get_labels_vectors(dataset_dir)
 #cv2.imshow("test", pic)
 #cv2.waitKey()
 #cv2.imwrite("grayscale_from_mnist.jpg", pic)
