@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 from skeletion_detection import convert_input_pic
+from svm_training import load_model
 
 import base64
 import random
@@ -41,6 +42,7 @@ MOCK_RESULTS = [
     "Z",
 ]
 
+classifier = load_model()
 
 @app.route("/process", methods=["POST"])
 def process():
@@ -52,6 +54,9 @@ def process():
 
     if len(landmarks) == 0:
         return jsonify({"classification": None, "error": "NO_LANDMARKS"})
+    
+    # prediction = classifier.predict(landmarks)
+    # print(prediction)
 
     random.shuffle(MOCK_RESULTS)
 
