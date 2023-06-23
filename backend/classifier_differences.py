@@ -1,5 +1,6 @@
 
 import numpy as np
+import csv
 import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -69,6 +70,66 @@ def write_csv_for_different_classifiers_performance():
     print(df)
     df.to_csv("../Data/comparison_of_models.csv")
 
+def write_csv_for_different_parameter_performance_knn():
+    with open('../Data/knn_param_test.csv', 'w', newline='') as csvfile:
+        fieldnames = ['neighbours', 'weight', 'algorithm', 'p', 'data', 'success Rate']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        algorithm = ['auto', 'ball_tree', 'kd_tree', 'brute']
+        p = [1,2]
+        neighbours = range(1,5,1)
+        weights = ['uniform', 'distance']
+        landmark_data = pd.read_csv("../Data/landmark_data.csv")
+        array = landmark_data.values
+        X = array[:,1:]
+        Y = array[:,0]
+        X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.25, random_state=26)
+        # iterate over classifiers
+        for a in algorithm:
+            for w in weights:
+                for aktP in p:
+                    for n in neighbours:
+                        print(a)
+                        clf = KNeighborsClassifier(n_neighbors=n, algorithm=a, weights=w, p=aktP)
+                        clf.fit(X_train, y_train)
+                        writer.writerow({'neighbours': n, 'weight': w, 'algorithm': a, 'p': aktP, 'data': 'train',
+                                         'success Rate': clf.score(X_train, y_train)})
+                        writer.writerow({'neighbours': n, 'weight': w, 'algorithm': a, 'p': aktP, 'data': 'test',
+                                         'success Rate': clf.score(X_test, y_test)})
+        #ser = pd.Series([train_scores, test_scores], index=names)
+
+    csvfile.close()
+
+
+def write_csv_for_different_parameter_performance_svm():
+    with open('../Data/svm_param_test.csv', 'w', newline='') as csvfile:
+        fieldnames = ['kernel', 'C', 'degree', 'gamma', 'data', 'success Rate']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        kernel = ['linear', 'poly', 'rbf', 'sigmoid']
+        C = np.arange(0.1,1,0.1)
+        degree = range(0,3,1)
+        gamma = ['auto', 'scale']
+        landmark_data = pd.read_csv("../Data/landmark_data.csv")
+        array = landmark_data.values
+        X = array[:,1:]
+        Y = array[:,0]
+        X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.25, random_state=26)
+        # iterate over classifiers
+        for k in kernel:
+            for g in gamma:
+                for aktC in C:
+                    for d in degree:
+                        print(k)
+                        clf = SVC(kernel=k, gamma=g, C=aktC, degree=d)
+                        clf.fit(X_train, y_train)
+                        writer.writerow({'kernel': k, 'gamma': g, 'C': aktC, 'degree': d, 'data': 'train',
+                                         'success Rate': clf.score(X_train, y_train)})
+                        writer.writerow({'kernel': k, 'gamma': g, 'C': aktC, 'degree': d, 'data': 'test',
+                                         'success Rate': clf.score(X_test, y_test)})
+        #ser = pd.Series([train_scores, test_scores], index=names)
+
+    csvfile.close()
 
 def plot_csv():
     data = pd.read_csv("../Data/comparison_of_models.csv")
@@ -97,3 +158,6 @@ def plot_csv():
     sns.despine()
     plt.tight_layout()
     plt.show()
+
+
+write_csv_for_different_parameter_performance_knn()
