@@ -7,6 +7,7 @@ import { BouncingArrow } from "../components/BouncingArrow";
 function Translate() {
   const [classificationResults, setClassificationResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleCaptureFrame = (frame) => {
     setIsLoading(true);
@@ -17,10 +18,15 @@ function Translate() {
     }).then((response) =>
       response.json().then((classificationResult) => {
         // TODO: Handle errors
-        setClassificationResults([
-          ...classificationResults,
-          { label: classificationResult.classification },
-        ]);
+        if (classificationResult.error === "NO_LANDMARKS") {
+          setError("No hand detected, please try again.");
+        } else {
+          setClassificationResults([
+            ...classificationResults,
+            { label: classificationResult.classification },
+          ]);
+          setError(null);
+        }
         setIsLoading(false);
       })
     );
@@ -42,8 +48,9 @@ function Translate() {
             </p>
           </>
         ) : (
-          <PreviewBox items={classificationResults} />
+            <PreviewBox items={classificationResults} />
         )}
+        {error && <p className="text-red-500 font-bold">{error}</p>}
         <Spinner active={isLoading} />
       </div>
     </>
