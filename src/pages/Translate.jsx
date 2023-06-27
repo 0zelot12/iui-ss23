@@ -1,58 +1,55 @@
 import { useState } from "react";
+import { classify } from "../api/classification"
 import { PreviewBox } from "../components/PreviewBox";
 import { Spinner } from "../components/Spinner";
 import { CameraInput } from "../components/CameraInput";
 import { BouncingArrow } from "../components/BouncingArrow";
-import { classify } from "../api/classification"
 
 function Translate() {
   const [classificationResults, setClassificationResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isInitializing, setIsInitializing] = useState(true);
   const [error, setError] = useState(null);
 
   const handleCaptureFrame = async (frame) => {
-    // TODO: Handle errors
     setIsLoading(true);
-    const classificationResult = await classify(frame);
-    if (classificationResult.error === "NO_LANDMARKS") {
-      setError("No hand detected, please try again.");
-    } else {
-      setClassificationResults([
-        ...classificationResults,
-        { label: classificationResult.classification },
-      ]);
-      setError(null);
+    try {
+      const classificationResult = await classify(frame);
+      if (classificationResult.error === "NO_LANDMARKS") {
+        setError("No hand detected, please try again.");
+      } else {
+        setClassificationResults([
+          ...classificationResults,
+          { label: classificationResult.classification },
+        ]);
+        setError(null);
+      }
+    } catch (error) {
+      setError(`An unexpected error occured: ${error.message}`);
     }
     setIsLoading(false);
   };
 
   return (
     <>
-      <Spinner className="h-10 w-10" active={isInitializing} centered />
       <CameraInput
         facingMode="environment"
         disabled={isLoading}
         onCaptureFrame={handleCaptureFrame}
-        onInitialized={() => {
-          setIsInitializing(false);
-        }}
       />
-      {!isInitializing &&
-        <div className="container p-2 space-y-2 mx-auto flex flex-col items-center">
-          {classificationResults.length === 0 ? (
-            <>
-              <BouncingArrow />
-              <p className="text-blue-950 text-xl text-center">
-                Tap to capture an image.
-              </p>
-            </>
-          ) : (
-            <PreviewBox items={classificationResults} />
-          )}
-          {error && <p className="text-red-500 font-bold">{error}</p>}
-          <Spinner className="h-6 w-6" active={isLoading} />
-        </div>}
+      <div className="container p-2 space-y-2 mx-auto flex flex-col items-center">
+        {classificationResults.length === 0 ? (
+          <>
+            <BouncingArrow />
+            <p className="text-blue-950 text-xl text-center">
+              Tap to capture an image.
+            </p>
+          </>
+        ) : (
+          <PreviewBox items={classificationResults} />
+        )}
+        {error && <p className="text-red-500 font-bold">{error}</p>}
+        <Spinner className="h-6 w-6" active={isLoading} />
+      </div>
     </>
   );
 }

@@ -1,13 +1,10 @@
 import { useEffect, useRef } from "react";
 
-function CameraInput({ facingMode, onInitialized, onCaptureFrame, disabled }) {
+function CameraInput({ facingMode, onCaptureFrame, disabled }) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    videoRef.current.addEventListener("loadeddata", () => {
-      onInitialized();
-    });
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
         .getUserMedia({
@@ -24,7 +21,7 @@ function CameraInput({ facingMode, onInitialized, onCaptureFrame, disabled }) {
     } else {
       console.error("This device does not support camera input.");
     }
-  }, [facingMode]);
+  }, [facingMode]); // Why do we need this?
 
   const handleClick = () => {
     if (disabled) {
