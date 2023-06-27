@@ -122,7 +122,10 @@ def pil_to_cv(img):
     return cv2.cvtColor(nimg, cv2.COLOR_RGB2BGR)
 
 def convert_input_pic(image):
-    skel_landmarks = detect_skeleton(pil_to_cv(image))
+    img = pil_to_cv(image)
+    resized_img = cv2.resize(img, (122, 132))
+    skel_landmarks = detect_skeleton(resized_img)
+
     if skel_landmarks is None:
         return []
     else:
