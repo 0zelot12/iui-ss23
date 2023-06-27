@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { classify } from "../api/classification"
+import { classify } from "../api/classification";
 import { PreviewBox } from "../components/PreviewBox";
 import { Spinner } from "../components/Spinner";
 import { CameraInput } from "../components/CameraInput";
