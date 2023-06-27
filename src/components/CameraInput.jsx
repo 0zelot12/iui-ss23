@@ -24,25 +24,24 @@ function CameraInput({ facingMode, onCaptureFrame, disabled }) {
   }, [facingMode]); // Why do we need this?
 
   const handleClick = () => {
-    if (disabled) {
-      return;
-    }
-    window.navigator?.vibrate?.(50);
-    canvasRef.current.width = videoRef.current.videoWidth;
-    canvasRef.current.height = videoRef.current.videoHeight;
-    canvasRef.current
-      .getContext("2d")
-      .drawImage(
-        videoRef.current,
-        0,
-        0,
-        canvasRef.current.width,
-        canvasRef.current.height
-      );
+    if (!disabled) {
+      window.navigator?.vibrate?.(50);
+      canvasRef.current.width = videoRef.current.videoWidth;
+      canvasRef.current.height = videoRef.current.videoHeight;
+      canvasRef.current
+        .getContext("2d")
+        .drawImage(
+          videoRef.current,
+          0,
+          0,
+          canvasRef.current.width,
+          canvasRef.current.height
+        );
 
-    onCaptureFrame({
-      data: canvasRef.current.toDataURL(),
-    });
+      onCaptureFrame({
+        data: canvasRef.current.toDataURL(),
+      });
+    }
   };
 
   return (
