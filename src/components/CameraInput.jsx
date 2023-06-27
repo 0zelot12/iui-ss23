@@ -1,10 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
-function CameraInput({ facingMode, onCaptureFrame, disabled }) {
+function CameraInput({ facingMode, onInitialized, onCaptureFrame, disabled }) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
   useEffect(() => {
+    videoRef.current.addEventListener("loadeddata", () => {
+      onInitialized();
+    });
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
         .getUserMedia({

@@ -7,6 +7,7 @@ import { BouncingArrow } from "../components/BouncingArrow";
 function Translate() {
   const [classificationResults, setClassificationResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
   const [error, setError] = useState(null);
 
   const handleCaptureFrame = (frame) => {
@@ -34,25 +35,30 @@ function Translate() {
 
   return (
     <>
+      <Spinner className="h-10 w-10" active={isInitializing} centered />
       <CameraInput
         facingMode="environment"
         disabled={isLoading}
         onCaptureFrame={handleCaptureFrame}
+        onInitialized={() => {
+          setIsInitializing(false);
+        }}
       />
-      <div className="container p-2 space-y-2 mx-auto flex flex-col items-center">
-        {classificationResults.length === 0 ? (
-          <>
-            <BouncingArrow />
-            <p className="text-blue-950 text-xl text-center">
-              Tap to capture an image.
-            </p>
-          </>
-        ) : (
+      {!isInitializing &&
+        <div className="container p-2 space-y-2 mx-auto flex flex-col items-center">
+          {classificationResults.length === 0 ? (
+            <>
+              <BouncingArrow />
+              <p className="text-blue-950 text-xl text-center">
+                Tap to capture an image.
+              </p>
+            </>
+          ) : (
             <PreviewBox items={classificationResults} />
-        )}
-        {error && <p className="text-red-500 font-bold">{error}</p>}
-        <Spinner active={isLoading} />
-      </div>
+          )}
+          {error && <p className="text-red-500 font-bold">{error}</p>}
+          <Spinner className="h-6 w-6" active={isLoading} />
+        </div>}
     </>
   );
 }
