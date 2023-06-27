@@ -48,7 +48,7 @@ function Translate() {
           <PreviewBox items={classificationResults} />
         )}
         {error && <p className="text-red-500 font-bold">{error}</p>}
-        <Spinner className="h-6 w-6" active={isLoading} />
+        <Spinner active={isLoading} />
       </div>
     </>
   );
