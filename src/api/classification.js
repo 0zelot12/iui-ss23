@@ -4,12 +4,10 @@ const classify = async (image) => {
   const reponse = await fetch(`${BASE_URL}/process`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ image: frame }),
+    body: JSON.stringify({ image: image }),
   });
 
-  const classficationResult = await reponse.json();
-
-  return classficationResult;
+  return reponse.json();
 }
 
 export { classify };

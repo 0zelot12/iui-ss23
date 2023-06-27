@@ -3,6 +3,7 @@ import { PreviewBox } from "../components/PreviewBox";
 import { Spinner } from "../components/Spinner";
 import { CameraInput } from "../components/CameraInput";
 import { BouncingArrow } from "../components/BouncingArrow";
+import { classify } from "../api/classification"
 
 function Translate() {
   const [classificationResults, setClassificationResults] = useState([]);
@@ -10,27 +11,20 @@ function Translate() {
   const [isInitializing, setIsInitializing] = useState(true);
   const [error, setError] = useState(null);
 
-  const handleCaptureFrame = (frame) => {
+  const handleCaptureFrame = async (frame) => {
+    // TODO: Handle errors
     setIsLoading(true);
-    fetch("http://127.0.0.1:5000/process", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ image: frame }),
-    }).then((response) =>
-      response.json().then((classificationResult) => {
-        // TODO: Handle errors
-        if (classificationResult.error === "NO_LANDMARKS") {
-          setError("No hand detected, please try again.");
-        } else {
-          setClassificationResults([
-            ...classificationResults,
-            { label: classificationResult.classification },
-          ]);
-          setError(null);
-        }
-        setIsLoading(false);
-      })
-    );
+    const classificationResult = await classify(frame);
+    if (classificationResult.error === "NO_LANDMARKS") {
+      setError("No hand detected, please try again.");
+    } else {
+      setClassificationResults([
+        ...classificationResults,
+        { label: classificationResult.classification },
+      ]);
+      setError(null);
+    }
+    setIsLoading(false);
   };
 
   return (
