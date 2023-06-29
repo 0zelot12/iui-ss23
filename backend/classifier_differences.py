@@ -1,5 +1,9 @@
 
 import numpy as np
+import plotly.express as px
+import plotly.graph_objects as go
+import plotly
+from plotly.subplots import make_subplots
 import csv
 import seaborn as sns
 import pandas as pd
@@ -84,6 +88,16 @@ def write_csv_for_different_parameter_performance_knn():
         X = array[:,1:]
         Y = array[:,0]
         X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.25, random_state=26)
+        real_data = pd.read_csv("../Data/landmark_data_realDataSet.csv")
+        array_real = real_data.values
+        X_real = array_real[:, 1:]
+        Y_real = array_real[:, 0]
+        X_train_real, X_test_real, y_train_real, y_test_real = train_test_split(X_real, Y_real, test_size=0.25,
+                                                                                random_state=26)
+        X_train = np.vstack((X_train, X_train_real))
+        y_train = np.hstack((y_train, y_train_real))
+        X_test = np.vstack((X_test, X_test_real))
+        y_test = np.hstack((y_test, y_test_real))
         # iterate over classifiers
         for a in algorithm:
             for w in weights:
@@ -115,6 +129,15 @@ def write_csv_for_different_parameter_performance_svm():
         X = array[:,1:]
         Y = array[:,0]
         X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.25, random_state=26)
+        real_data = pd.read_csv("../Data/landmark_data_realDataSet.csv")
+        array_real = real_data.values
+        X_real = array_real[:, 1:]
+        Y_real = array_real[:, 0]
+        X_train_real, X_test_real, y_train_real, y_test_real = train_test_split(X_real, Y_real, test_size=0.25, random_state=26)
+        X_train = np.vstack((X_train,X_train_real))
+        y_train = np.hstack((y_train, y_train_real))
+        X_test = np.vstack((X_test, X_test_real))
+        y_test = np.hstack((y_test, y_test_real))
         # iterate over classifiers
         for k in kernel:
             for g in gamma:
@@ -159,5 +182,63 @@ def plot_csv():
     plt.tight_layout()
     plt.show()
 
+def plot_param_tests():
+    knn_test = pd.read_csv('../Data/knn_param_test.csv')
+    svm_test = pd.read_csv('../Data/svm_param_test.csv')
 
-write_csv_for_different_parameter_performance_knn()
+    knn_test["data_nr"]=knn_test["data"]
+    svm_test["data_nr"] = svm_test["data"]
+
+    knn_test = knn_test.replace({'data_nr': {"train": 0,"test": 1}})
+    svm_test = svm_test.replace({'data_nr': {"train": 0, "test": 1}})
+
+    knn_test["success range"] = knn_test["success Rate"].round(2)
+    svm_test["success range"] = svm_test["success Rate"].round(2)
+
+    svm_test = svm_test[svm_test['success range'] > 0.4]
+    svm_test = svm_test[svm_test['data'] == "test"]
+    knn_test = knn_test[knn_test['data'] == "test"]
+
+
+    my_dimensions1 = [
+        {'label': 'neighbours', 'values': knn_test["neighbours"]},
+        {"label": "weight", "values": knn_test["weight"]},
+        {"label": "algorithm", "values": knn_test["algorithm"]},
+        {"label": "p", "values": knn_test["p"]},
+        #{"label": "data", "values": knn_test["data"]},
+        {"label": "Success Rate", "values": knn_test["success range"]}]
+
+    my_dimensions2 = [
+        {'label': 'kernel', 'values': svm_test["kernel"]},
+        {"label": "gamma", "values": svm_test["gamma"]},
+        {"label": "C", "values": svm_test["C"]},
+        {"label": "degree", "values": svm_test["degree"]},
+        #{"label": "data", "values": svm_test["data"]},
+        {"label": "Success Rate", "values": svm_test["success range"]}]
+
+    #color1 = knn_test["data_nr"]
+    #colorscale1 = [[0, 'green'], [1, 'yellow']]
+
+    #color2 = svm_test["data_nr"]
+    #colorscale2 = [[0, 'green'], [1, 'yellow']]
+
+    color1 = [(x - knn_test['success range'].min()) / (knn_test['success range'].max() - knn_test['success range'].min()) for x in knn_test['success range']]
+    colorscale1 = [[0.0, 'green'], [0.5, 'yellow'], [1.0, 'red']]
+    color2 = [(x - svm_test['success range'].min()) / (svm_test['success range'].max() - svm_test['success range'].min()) for
+        x in svm_test['success range']]
+    colorscale2 = [[0.0, 'green'], [0.95, 'yellow'], [1.0, 'red']]
+
+    fig = go.Figure(go.Parcats(dimensions=my_dimensions1, line={'color': color1, 'colorscale': colorscale1, 'shape': 'hspline'},
+                   hoveron='color', hoverinfo='all'))
+    fig.update_traces(dimensions=[{"categoryorder":"category descending"}], selector=dict(type='parcats'))
+    fig.show()
+
+    fig2 = go.Figure(go.Parcats(dimensions=my_dimensions2, line={'color': color2, 'colorscale': colorscale2, 'shape': 'hspline'},
+                   hoveron='color', hoverinfo='all'))
+    fig2.update_traces(dimensions=[{"categoryorder": "category descending"}], selector=dict(type='parcats'))
+    fig2.show()
+
+#write_csv_for_different_parameter_performance_knn()
+#write_csv_for_different_parameter_performance_svm()
+
+plot_param_tests()

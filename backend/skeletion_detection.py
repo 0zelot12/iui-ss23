@@ -71,25 +71,21 @@ def build_pic_vector(img):
     #img = img / 255.
     return img[0]
 
+def return_skeleton_pic(frame):
+    mp_hands = mp.solutions.hands
+    mp_drawing_utils = mp.solutions.drawing_utils
+    frame_overwritten = frame.copy()
+    landmarks = detect_skeleton(frame)
+    for hand_landmarks in landmarks:
+        mp_drawing_utils.draw_landmarks(frame_overwritten, hand_landmarks,mp_hands.HAND_CONNECTIONS)
+
+    return frame_overwritten
+
 
 def detect_skeleton(frame):
     mp_hands = mp.solutions.hands
     hands = mp_hands.Hands(static_image_mode=True)
-    mp_drawing_utils = mp.solutions.drawing_utils
-    #frame_overwritten = frame.copy()
-    #print(frame.shape)
-    frame_overwritten = np.zeros(frame.shape, dtype=np.uint8)
     results = hands.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-    #return results.multi_hand_landmarks
-    #print(type(results.multi_hand_landmarks[0]))
-    #for hand_landmarks in results.multi_hand_landmarks[0].landmark:
-    #    print(hand_landmarks.x)
-        #mp_drawing_utils.draw_landmarks(frame_overwritten, hand_landmarks,
-                                           #mp_hands.HAND_CONNECTIONS)
-
-
-    #cv2.imshow("Result", frame_overwritten)
-    #cv2.waitKey()
     return results.multi_hand_landmarks
 
 def normalise_handlandmarks(landmark):
@@ -143,6 +139,8 @@ def convert_input_pic(image):
 #train_data = pd.read_csv("../Data/sign_mnist_train.csv")
 #pic = preprocess_image(np.array(train_data.iloc[0,1:]))
 #detect_skeleton(pic)
+#cv2.imshow("rest",return_skeleton_pic(frame))
+#cv2.waitKey()
 
 #dataset_dir = os.path.abspath('../Data/archive/dataset5/C/*')
 #data_dict = get_labels_images(dataset_dir)
