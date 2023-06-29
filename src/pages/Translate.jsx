@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { classify } from "../api/classification";
 import { PreviewBox } from "../components/PreviewBox";
 import { Spinner } from "../components/Spinner";
 import { CameraInput } from "../components/CameraInput";
@@ -9,27 +10,23 @@ function Translate() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleCaptureFrame = (frame) => {
+  const handleCaptureFrame = async (frame) => {
     setIsLoading(true);
-    fetch("http://localhost:5000/process", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ image: frame }),
-    }).then((response) =>
-      response.json().then((classificationResult) => {
-        // TODO: Handle errors
-        if (classificationResult.error === "NO_LANDMARKS") {
-          setError("No hand detected, please try again.");
-        } else {
-          setClassificationResults([
-            ...classificationResults,
-            { label: classificationResult.classification },
-          ]);
-          setError(null);
-        }
-        setIsLoading(false);
-      })
-    );
+    try {
+      const classificationResult = await classify(frame);
+      if (classificationResult.error === "NO_LANDMARKS") {
+        setError("No hand detected, please try again.");
+      } else {
+        setClassificationResults([
+          ...classificationResults,
+          { label: classificationResult.classification },
+        ]);
+        setError(null);
+      }
+    } catch (error) {
+      setError(`An unexpected error occured: ${error.message}`);
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -48,7 +45,7 @@ function Translate() {
             </p>
           </>
         ) : (
-            <PreviewBox items={classificationResults} />
+          <PreviewBox items={classificationResults} />
         )}
         {error && <p className="text-red-500 font-bold">{error}</p>}
         <Spinner active={isLoading} />

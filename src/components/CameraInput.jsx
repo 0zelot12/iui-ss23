@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 function CameraInput({ facingMode, onCaptureFrame, disabled }) {
   const videoRef = useRef(null);
@@ -21,28 +21,27 @@ function CameraInput({ facingMode, onCaptureFrame, disabled }) {
     } else {
       console.error("This device does not support camera input.");
     }
-  }, [facingMode]);
+  }, [facingMode]); // Why do we need this?
 
   const handleClick = () => {
-    if (disabled) {
-      return;
-    }
-    window.navigator?.vibrate?.(50);
-    canvasRef.current.width = videoRef.current.videoWidth;
-    canvasRef.current.height = videoRef.current.videoHeight;
-    canvasRef.current
-      .getContext("2d")
-      .drawImage(
-        videoRef.current,
-        0,
-        0,
-        canvasRef.current.width,
-        canvasRef.current.height
-      );
+    if (!disabled) {
+      window.navigator?.vibrate?.(50);
+      canvasRef.current.width = videoRef.current.videoWidth;
+      canvasRef.current.height = videoRef.current.videoHeight;
+      canvasRef.current
+        .getContext("2d")
+        .drawImage(
+          videoRef.current,
+          0,
+          0,
+          canvasRef.current.width,
+          canvasRef.current.height
+        );
 
-    onCaptureFrame({
-      data: canvasRef.current.toDataURL(),
-    });
+      onCaptureFrame({
+        data: canvasRef.current.toDataURL(),
+      });
+    }
   };
 
   return (
