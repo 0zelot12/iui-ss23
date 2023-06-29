@@ -72,6 +72,7 @@ def build_pic_vector(img):
     return img[0]
 
 def return_skeleton_pic(frame):
+    frame = pil_to_cv(frame)
     mp_hands = mp.solutions.hands
     mp_drawing_utils = mp.solutions.drawing_utils
     frame_overwritten = frame.copy()
