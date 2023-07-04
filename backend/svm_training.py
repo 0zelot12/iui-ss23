@@ -63,4 +63,4 @@ def save_and_train_model():
     classifier.fit(X_train, y_train)
     save_model(classifier)
 
-save_and_train_model()
+# save_and_train_model()
