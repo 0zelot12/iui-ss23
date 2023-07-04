@@ -1,5 +1,5 @@
 const getReferenceImage = (letter) => {
-  return `${letter}.png`;
+  return `/reference/${letter}.png`;
 };
 
 export { getReferenceImage };

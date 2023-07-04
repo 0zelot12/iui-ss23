@@ -1,8 +1,11 @@
-function PreviewItem({ item }) {
+function PreviewItem({ item, onClick }) {
   return (
     <li
       key={item.id}
-      className="p-2 border-2 border-blue-500 rounded text-blue-950"
+      className="p-2 border-2 border-blue-500 rounded text-blue-950 cursor-pointer"
+      onClick={() => {
+        onClick(item);
+      }}
     >
       {item.label}
     </li>

@@ -4,10 +4,14 @@ import { PreviewBox } from "../components/PreviewBox";
 import { Spinner } from "../components/Spinner";
 import { CameraInput } from "../components/CameraInput";
 import { BouncingArrow } from "../components/BouncingArrow";
+import { Popover } from "../components/Popover";
+import { getReferenceImage } from "../lib/utils";
 
 function Translate() {
   const [classificationResults, setClassificationResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [popupActive, setPopupActive] = useState(false);
+  const [referenceImage, setReferenceImage] = useState(null);
   const [error, setError] = useState(null);
 
   const handleCaptureFrame = async (frame) => {
@@ -45,11 +49,30 @@ function Translate() {
             </p>
           </>
         ) : (
-          <PreviewBox items={classificationResults} />
+          <PreviewBox
+            onItemClick={(item) => {
+              setReferenceImage(getReferenceImage(item.label));
+              setPopupActive(true);
+            }}
+            items={classificationResults}
+          />
         )}
         {error && <p className="text-red-500 font-bold">{error}</p>}
         <Spinner active={isLoading} />
-        <img src={require("../assets/reference/a.png")} />
+        <Popover active={popupActive}>
+          <img className="mx-auto" src={referenceImage} alt="Sign language" />
+          <div className="space-x-2">
+            <button
+              className="bg-blue-500 px-4 py-2 rounded"
+              onClick={() => {
+                setPopupActive(false);
+              }}
+            >
+              Back
+            </button>
+            <button className="bg-red-500 px-4 py-2 rounded">Delete</button>
+          </div>
+        </Popover>
       </div>
     </>
   );
