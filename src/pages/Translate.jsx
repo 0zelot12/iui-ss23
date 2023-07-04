@@ -49,6 +49,7 @@ function Translate() {
         )}
         {error && <p className="text-red-500 font-bold">{error}</p>}
         <Spinner active={isLoading} />
+        <img src={require("../assets/reference/a.png")} />
       </div>
     </>
   );
