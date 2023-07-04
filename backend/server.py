@@ -10,11 +10,13 @@ import base64
 
 from PIL import Image
 from io import BytesIO
+import uuid
 
 app = Flask(__name__)
 CORS(app)
 
 classifier = load_model()
+
 
 @app.route("/process", methods=["POST"])
 def process():
@@ -25,8 +27,8 @@ def process():
     landmarks = convert_input_pic(png_image)
 
     if len(landmarks) == 0:
-        return jsonify({"classification": None, "error": "NO_LANDMARKS"})
-    
+        return jsonify({"id": None, "classification": None, "error": "NO_LANDMARKS"})
+
     prediction = classifier.predict(np.array(landmarks).reshape(1, -1))
 
-    return jsonify({"classification": prediction[0], "error": None})
+    return jsonify({"id": uuid.uuid4(), "classification": prediction[0], "error": None})

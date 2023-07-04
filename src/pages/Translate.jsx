@@ -23,7 +23,10 @@ function Translate() {
       } else {
         setClassificationResults([
           ...classificationResults,
-          { label: classificationResult.classification },
+          {
+            id: classificationResult.id,
+            label: classificationResult.classification,
+          },
         ]);
         setError(null);
       }
