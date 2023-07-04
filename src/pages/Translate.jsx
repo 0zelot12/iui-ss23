@@ -12,6 +12,8 @@ function Translate() {
   const [isLoading, setIsLoading] = useState(false);
   const [popupActive, setPopupActive] = useState(false);
   const [referenceImage, setReferenceImage] = useState(null);
+  const [selectedClassifcationResult, setSelectedClassifcationResult] =
+    useState(null);
   const [error, setError] = useState(null);
 
   const handleCaptureFrame = async (frame) => {
@@ -36,6 +38,15 @@ function Translate() {
     setIsLoading(false);
   };
 
+  const handleOnDelete = () => {
+    setClassificationResults(
+      classificationResults.filter(
+        (cr) => cr.id !== selectedClassifcationResult.id
+      )
+    );
+    setPopupActive(false);
+  };
+
   return (
     <>
       <CameraInput
@@ -54,6 +65,7 @@ function Translate() {
         ) : (
           <PreviewBox
             onItemClick={(item) => {
+              setSelectedClassifcationResult(item);
               setReferenceImage(getReferenceImage(item.label));
               setPopupActive(true);
             }}
@@ -73,7 +85,12 @@ function Translate() {
             >
               Back
             </button>
-            <button className="bg-red-500 px-4 py-2 rounded">Delete</button>
+            <button
+              className="bg-red-500 px-4 py-2 rounded"
+              onClick={handleOnDelete}
+            >
+              Delete
+            </button>
           </div>
         </Popup>
       </div>
