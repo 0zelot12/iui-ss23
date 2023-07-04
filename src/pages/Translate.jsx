@@ -4,7 +4,7 @@ import { PreviewBox } from "../components/PreviewBox";
 import { Spinner } from "../components/Spinner";
 import { CameraInput } from "../components/CameraInput";
 import { BouncingArrow } from "../components/BouncingArrow";
-import { Popover } from "../components/Popover";
+import { Popup } from "../components/Popup";
 import { getReferenceImage } from "../lib/utils";
 
 function Translate() {
@@ -59,7 +59,7 @@ function Translate() {
         )}
         {error && <p className="text-red-500 font-bold">{error}</p>}
         <Spinner active={isLoading} />
-        <Popover active={popupActive}>
+        <Popup active={popupActive}>
           <img className="mx-auto" src={referenceImage} alt="Sign language" />
           <div className="space-x-2">
             <button
@@ -72,7 +72,7 @@ function Translate() {
             </button>
             <button className="bg-red-500 px-4 py-2 rounded">Delete</button>
           </div>
-        </Popover>
+        </Popup>
       </div>
     </>
   );
