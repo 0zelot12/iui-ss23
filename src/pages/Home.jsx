@@ -4,7 +4,7 @@ function Home() {
   return (
     <div className="container mx-auto text-center text-2xl p-2 grid grid-cols-1 lg:grid-cols-3 gap-x-2 gap-y-2">
       <Link to="/translate">
-        <div className="rounded-3xl shadow-md p-2 bg-blue-200">
+        <div className="rounded-3xl shadow-md p-6 bg-blue-200">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -23,7 +23,7 @@ function Home() {
         </div>
       </Link>
       <Link to="/training">
-        <div className="rounded-3xl shadow-md p-2 bg-blue-200">
+        <div className="rounded-3xl shadow-md p-6 bg-blue-200">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
