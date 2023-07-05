@@ -12,9 +12,9 @@ function Translate() {
   const [isLoading, setIsLoading] = useState(false);
   const [popupActive, setPopupActive] = useState(false);
   const [referenceImage, setReferenceImage] = useState(null);
+  const [error, setError] = useState(null);
   const [selectedClassifcationResult, setSelectedClassifcationResult] =
     useState(null);
-  const [error, setError] = useState(null);
 
   const handleCaptureFrame = async (frame) => {
     setIsLoading(true);
@@ -38,13 +38,19 @@ function Translate() {
     setIsLoading(false);
   };
 
-  const handleOnDelete = () => {
+  const handleOnDeleteClick = () => {
     setClassificationResults(
       classificationResults.filter(
         (cr) => cr.id !== selectedClassifcationResult.id
       )
     );
     setPopupActive(false);
+  };
+
+  const handleOnPreviewBoxItemClick = (item) => {
+    setSelectedClassifcationResult(item);
+    setReferenceImage(getReferenceImage(item.label));
+    setPopupActive(true);
   };
 
   return (
@@ -64,11 +70,7 @@ function Translate() {
           </>
         ) : (
           <PreviewBox
-            onItemClick={(item) => {
-              setSelectedClassifcationResult(item);
-              setReferenceImage(getReferenceImage(item.label));
-              setPopupActive(true);
-            }}
+            onItemClick={handleOnPreviewBoxItemClick}
             items={classificationResults}
           />
         )}
@@ -87,7 +89,7 @@ function Translate() {
             </button>
             <button
               className="bg-red-500 px-4 py-2 rounded"
-              onClick={handleOnDelete}
+              onClick={handleOnDeleteClick}
             >
               Delete
             </button>
