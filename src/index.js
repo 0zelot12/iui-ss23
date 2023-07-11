@@ -13,6 +13,9 @@ import { Translate } from "./pages/Translate";
 import { Training } from "./pages/Training";
 import { DefaultLayout } from "./layouts/DefaultLayout";
 import { Settings } from "./pages/Settings";
+import { Challenge } from "./pages/training_pages/Challenge";
+import { Gallery } from "./pages/training_pages/Gallery";
+import { Learning } from "./pages/training_pages/Learning";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,6 +24,9 @@ const router = createBrowserRouter(
       <Route path="translate" element={<Translate />} />
       <Route path="training" element={<Training />} />
       <Route path="settings" element={<Settings />} />
+      <Route path="challenge" element={<Challenge />} />
+      <Route path="gallery" element={<Gallery />} />
+      <Route path="learning" element={<Learning />} />
     </Route>
   )
 );
