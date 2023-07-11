@@ -8,13 +8,7 @@ import { Popup } from "../../components/Popup";
 import { getReferenceImage } from "../../lib/utils";
 
 import styled from "styled-components";
-import {
-  CarouselProvider,
-  Slider,
-  Slide,
-  ButtonBack,
-  ButtonNext,
-} from "pure-react-carousel";
+import imgs from "./Images";
 
 function Learning() {
   //get only one result at a time.
@@ -25,6 +19,49 @@ function Learning() {
   const [error, setError] = useState(null);
 
   const [refLetter, setrefLetter] = useState(null);
+
+  const alphabet = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+  ];
+
+  const alphabetData = alphabet.map((letter, index) => ({
+    letter: letter,
+    //signImage: "./ref_pics/${letter}.png",
+    //signImage: images[`${letter}.png`],
+    signImage: imgs[index],
+  }));
+
+  const handleButtonClick = (letter) => {
+    setrefLetter(letter);
+    //setSign(signImage);
+  };
+
+  const selectedData = alphabetData.find((data) => data.letter === refLetter);
 
   const handleCaptureFrame = async (frame) => {
     setIsLoading(true);
@@ -61,22 +98,24 @@ function Learning() {
     color: dodgerblue;
   `;
 
-  const ArrowButton = styled.button`
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 24px;
-    background-color: transparent;
+  const TableContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    max_width: 500px;
+    margin: 0 auto;
+  `;
+
+  const Button = styled.button`
+    display: block;
+    text-align: center;
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    font-weight: bold;
+    background-color: dodgerblue;
     border: none;
-    outline: none;
-  `;
-
-  const PreviousButton = styled(ArrowButton)`
-    left: 20px;
-  `;
-
-  const NextButton = styled(ArrowButton)`
-    right: 20px;
+    border-radius: 4px;
+    color: white;
   `;
 
   const Letter = styled.div`
@@ -95,51 +134,40 @@ function Learning() {
     color: dodgerblue;
   `;
 
+  const Image = styled.img`
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    transform: scale(1);
+  `;
+
   // dont forget ref letter
   return (
     <>
       <Title>Sign Training</Title>
       <Tagline>Currently:</Tagline>
-      <CarouselProvider
-        naturalSlideWidth={100}
-        naturalSlideHeight={125}
-        totalSlides={26}
-      >
-        <Slider>
-          <Slide index={0}>first</Slide>
-          <Slide index={1}>second</Slide>
-          <Slide index={2}>first</Slide>
-          <Slide index={3}>first</Slide>
-          <Slide index={4}>first</Slide>
-
-          <Slide index={5}>first</Slide>
-          <Slide index={6}>first</Slide>
-          <Slide index={7}>first</Slide>
-          <Slide index={8}>first</Slide>
-          <Slide index={9}>first</Slide>
-
-          <Slide index={10}>first</Slide>
-          <Slide index={11}>first</Slide>
-          <Slide index={12}>first</Slide>
-          <Slide index={13}>first</Slide>
-          <Slide index={14}>first</Slide>
-
-          <Slide index={15}>first</Slide>
-          <Slide index={16}>first</Slide>
-          <Slide index={17}>first</Slide>
-          <Slide index={18}>first</Slide>
-          <Slide index={19}>first</Slide>
-
-          <Slide index={20}>first</Slide>
-          <Slide index={21}>first</Slide>
-          <Slide index={22}>first</Slide>
-          <Slide index={23}>first</Slide>
-          <Slide index={24}>first</Slide>
-          <Slide index={25}>last</Slide>
-        </Slider>
-        <ButtonBack>Back</ButtonBack>
-        <ButtonNext>Next</ButtonNext>
-      </CarouselProvider>
+      <h1>
+        <TableContainer>
+          {alphabetData.map((data) => (
+            <Button
+              key={data.letter}
+              onClick={() => handleButtonClick(data.letter)}
+            >
+              {data.letter}
+            </Button>
+          ))}
+        </TableContainer>
+        <div>
+          {selectedData && (
+            <div>
+              <Letter>{refLetter}</Letter>
+              <Image src={selectedData.signImage} />
+            </div>
+          )}
+        </div>
+      </h1>
 
       <CameraInput
         facingMode="environment"
