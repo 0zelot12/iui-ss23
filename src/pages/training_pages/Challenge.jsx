@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { classify } from "../../lib/classification";
+import { classify } from "../../libs/classification";
 import { PreviewBox } from "../../components/PreviewBox";
 import { Spinner } from "../../components/Spinner";
 import { CameraInput } from "../../components/CameraInput";
 import { BouncingArrow } from "../../components/BouncingArrow";
 import { Popup } from "../../components/Popup";
-import { getReferenceImage } from "../../lib/utils";
+import { getReferenceImage } from "../../libs/utils";
 import styled from "styled-components";
 
 function Challenge() {
