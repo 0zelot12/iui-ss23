@@ -25,6 +25,7 @@ from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 from sklearn.inspection import DecisionBoundaryDisplay
 
 
+# function to record results for different models
 def write_csv_for_different_classifiers_performance():
     names = [
         "Nearest Neighbors",
@@ -74,6 +75,7 @@ def write_csv_for_different_classifiers_performance():
     print(df)
     df.to_csv("../Data/comparison_of_models.csv")
 
+# function to record results for different parameters used in the training of the KNN
 def write_csv_for_different_parameter_performance_knn():
     with open('../Data/knn_param_test.csv', 'w', newline='') as csvfile:
         fieldnames = ['neighbours', 'weight', 'algorithm', 'p', 'data', 'success Rate']
@@ -114,7 +116,7 @@ def write_csv_for_different_parameter_performance_knn():
 
     csvfile.close()
 
-
+# function to record results for different parameters used in the training of the SVM
 def write_csv_for_different_parameter_performance_svm():
     with open('../Data/svm_param_test.csv', 'w', newline='') as csvfile:
         fieldnames = ['kernel', 'C', 'degree', 'gamma', 'data', 'success Rate']
@@ -154,6 +156,7 @@ def write_csv_for_different_parameter_performance_svm():
 
     csvfile.close()
 
+# plotting function for the comparison of the models
 def plot_csv():
     data = pd.read_csv("../Data/comparison_of_models.csv")
     data = data.T
@@ -182,6 +185,7 @@ def plot_csv():
     plt.tight_layout()
     plt.show()
 
+# plotting function for the different parameters in the training of the models
 def plot_param_tests():
     knn_test = pd.read_csv('../Data/knn_param_test.csv')
     svm_test = pd.read_csv('../Data/svm_param_test.csv')
@@ -199,13 +203,11 @@ def plot_param_tests():
     svm_test = svm_test[svm_test['data'] == "test"]
     knn_test = knn_test[knn_test['data'] == "test"]
 
-
     my_dimensions1 = [
         {'label': 'neighbours', 'values': knn_test["neighbours"]},
         {"label": "weight", "values": knn_test["weight"]},
         {"label": "algorithm", "values": knn_test["algorithm"]},
         {"label": "p", "values": knn_test["p"]},
-        #{"label": "data", "values": knn_test["data"]},
         {"label": "Success Rate", "values": knn_test["success range"]}]
 
     my_dimensions2 = [
@@ -213,14 +215,7 @@ def plot_param_tests():
         {"label": "gamma", "values": svm_test["gamma"]},
         {"label": "C", "values": svm_test["C"]},
         {"label": "degree", "values": svm_test["degree"]},
-        #{"label": "data", "values": svm_test["data"]},
         {"label": "Success Rate", "values": svm_test["success range"]}]
-
-    #color1 = knn_test["data_nr"]
-    #colorscale1 = [[0, 'green'], [1, 'yellow']]
-
-    #color2 = svm_test["data_nr"]
-    #colorscale2 = [[0, 'green'], [1, 'yellow']]
 
     color1 = [(x - knn_test['success range'].min()) / (knn_test['success range'].max() - knn_test['success range'].min()) for x in knn_test['success range']]
     colorscale1 = [[0.0, 'green'], [0.5, 'yellow'], [1.0, 'red']]
@@ -238,7 +233,3 @@ def plot_param_tests():
     fig2.update_traces(dimensions=[{"categoryorder": "category descending"}], selector=dict(type='parcats'))
     fig2.show()
 
-#write_csv_for_different_parameter_performance_knn()
-#write_csv_for_different_parameter_performance_svm()
-
-plot_param_tests()
